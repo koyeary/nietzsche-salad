@@ -149,7 +149,7 @@ var connection = mysql.createConnection({
   }
 
   function roleSearch() {
-    const query = "SELECT * FROM roles";
+    const query = "SELECT * FROM role";
     connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
         console.log(
