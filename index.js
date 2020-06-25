@@ -2,6 +2,8 @@ const mysql = require('mysql');
 const inquirer = require('inquirer');
 const express = require('express');
 
+const app = express();
+
 var connection = mysql.createConnection({
     host: "localhost",
   
@@ -10,10 +12,11 @@ var connection = mysql.createConnection({
   
     // Your username
     user: "katyeary",
+    /* user: "root", */
   
     // Your password
     password: "newPass",
-    database: "top_songsDB"
+    database: "employee_DB"
   });
 
   connection.connect(function(err) {
@@ -48,11 +51,10 @@ var connection = mysql.createConnection({
       .then(function(answer) {
         switch (answer.action) {
         case "View all employees":
-            console.log("view all employees");
-          /* employeeSearch(); */
+            employeeSearch();
           break;
   
-        case "View all employees by department":
+        /* case "View all employees by department":
           multiSearch();
           break;
   
@@ -74,25 +76,25 @@ var connection = mysql.createConnection({
     
         case "Update employee manager":
             mgmtRoleSearch();
-            break;
+            break; */
     
         case "View all roles":
-            employeeSearch();
+            roleSearch();
             break;
   
-        case "Add role":
+      /*   case "Add role":
                 mgmtRoleSearch();
             break;
         
         case "Remove role":
                 employeeSearch();
-                break;
+                break; */
       
         case "View all departments":
-                  employeeSearch();
+                  departmentSearch();
                   break;
           
-        case "Add department":
+     /*    case "Add department":
                   multiSearch();
                   break;
           
@@ -102,10 +104,76 @@ var connection = mysql.createConnection({
           
         case "View the utilized budget of a department":
                   budgetSearch();
-                  break;    
+                  break;     */
         case "exit":
           connection.end();
           break;
         }
       });
   }
+
+  function employeeSearch() {
+    const query = "SELECT * FROM employee";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+          "First Name: " +
+            res[i].first_name +
+            " || Last Name: " +
+            res[i].last_name +
+            " || Role: " +
+            res[i].role +
+            " || Manager ID: " +
+            res[i].manager_id
+
+        );
+      }
+    });
+
+  }
+
+  function departmentSearch() {
+    const query = "SELECT * FROM department";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+          "Name: " +
+            res[i].name +
+            " || Department ID: " +
+            res[i].department_id
+           
+        );
+      }
+    });
+
+  }
+
+  function roleSearch() {
+    const query = "SELECT * FROM roles";
+    connection.query(query, function(err, res) {
+      for (var i = 0; i < res.length; i++) {
+        console.log(
+          "Title: " +
+            res[i].title +
+            " || Salary: " +
+            res[i].salary +
+            " || Department ID: " +
+            res[i].department_id
+           
+        );
+      }
+    });
+
+  }
+
+/*   function findManager() {
+      employeeSearch()
+      .then(
+
+      )
+
+        );
+      }
+    });
+
+  } */
