@@ -1,8 +1,8 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const express = require('express');
-const Employee = require('./employeeModule');
-const cTable = require('console.table');
+const Employee = require('./queries');
+//const cTable = require('console.table');
 
 const app = express();
 
@@ -118,7 +118,7 @@ var connection = mysql.createConnection({
     const query = "SELECT * FROM employee";
     connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
-        console.(
+        console.log(
           "First Name: " +
             res[i].first_name +
             " || Last Name: " +
@@ -169,6 +169,13 @@ var connection = mysql.createConnection({
 
   }
 
-app.listen('3000', () => {
-  console.log('Server started on port 3000');
-});
+  function addEmployee() {
+    //this is a test
+    //new Employee (12, "Brad", "Verter", "Janitor", 5);
+    let post = '("Brad", "Verter", "Janitor", 5)';
+    let sql = `INSERT into employee (first_name, last_name, role, manager_id) VALUES ${post};`;
+    connection.query(sql, (err, res) => {
+      if (err) throw err;
+      console.log("Post added");
+    })
+  }
