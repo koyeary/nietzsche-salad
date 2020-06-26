@@ -1,6 +1,8 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 const express = require('express');
+const Employee = require('./employeeModule');
+const cTable = require('console.table');
 
 const app = express();
 
@@ -51,7 +53,7 @@ var connection = mysql.createConnection({
       .then(function(answer) {
         switch (answer.action) {
         case "View all employees":
-            employeeSearch();
+            employeeAll();
           break;
   
         /* case "View all employees by department":
@@ -61,19 +63,19 @@ var connection = mysql.createConnection({
         case "View all employees by manager":
           mgmtRoleSearch();
           break;
-  
+  */
         case "Add employee":
-          employeeSearch();
+          addEmployee();
           break;
-
+/*
         case "Remove employee":
             employeeSearch();
             break;
-    
+    */
         case "Update employee role":
-            multiSearch();
+            updateField();
             break;
-    
+    /*
         case "Update employee manager":
             mgmtRoleSearch();
             break; */
@@ -112,11 +114,11 @@ var connection = mysql.createConnection({
       });
   }
 
-  function employeeSearch() {
+  function employeeAll() {
     const query = "SELECT * FROM employee";
     connection.query(query, function(err, res) {
       for (var i = 0; i < res.length; i++) {
-        console.log(
+        console.(
           "First Name: " +
             res[i].first_name +
             " || Last Name: " +
@@ -128,8 +130,9 @@ var connection = mysql.createConnection({
 
         );
       }
-    });
 
+    });
+    runSearch();
   }
 
   function departmentSearch() {
@@ -154,11 +157,11 @@ var connection = mysql.createConnection({
       for (var i = 0; i < res.length; i++) {
         console.log(
           "Title: " +
-            res[i].title +
-            " || Salary: " +
-            res[i].salary +
-            " || Department ID: " +
-            res[i].department_id
+          res[i].title +
+          " || Salary: " +
+          res[i].salary +
+          " || Department ID: " +
+          res[i].department_id
            
         );
       }
@@ -166,14 +169,6 @@ var connection = mysql.createConnection({
 
   }
 
-/*   function findManager() {
-      employeeSearch()
-      .then(
-
-      )
-
-        );
-      }
-    });
-
-  } */
+app.listen('3000', () => {
+  console.log('Server started on port 3000');
+});
