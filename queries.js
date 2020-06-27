@@ -26,7 +26,15 @@ class Field {
     this.table = table;
     this.post = post;
     }
-   
+  
+  delete()  {
+    let sql = `DELETE FROM ${this.table} WHERE ${this.post};`;
+    connection.query(sql, function (err, res) {
+      if (err) throw err;
+      console.log("deleted");
+    });
+  }
+
   addQuery() { 
     let sql = `INSERT INTO ${this.table} (first_name, last_name, role, manager_id) VALUES (${this.post})`;
     connection.query(sql, function (err, res)  {

@@ -67,11 +67,11 @@ function runSearch() {
         case "Add employee":
           addEmployee();
           break;
-        /*
-                case "Remove employee":
-                    employeeSearch();
-                    break;
-            */
+
+        case "Remove employee":
+          removeData();
+          break;
+
         case "Update employee role":
           updateField();
           break;
@@ -89,7 +89,7 @@ function runSearch() {
               break;
           
           case "Remove role":
-                  employeeSearch();
+                  deleteEmployee();
                   break; */
 
         case "View all departments":
@@ -193,7 +193,8 @@ function addEmployee() {
     }]
     ).then(function (answer) {
       const post = `"${answer.firstName}", "${answer.lastName}", "${answer.role}", ${answer.managerId}`;
-      const add = new Field(post);
+      const table = "employee";
+      const add = new Field(post, table);
       add.addQuery();
 
       // let f = new Field();
@@ -202,3 +203,20 @@ function addEmployee() {
 
 }
 
+function removeData() {
+  inquirer
+    .prompt({
+      name: "last_name",
+      type: "input",
+      message: "Enter the last name of the employee you'd like to remove."
+
+    }
+    ).then(function (answer) {
+      const post = `last_name="${answer.last_name}"`;
+      const table = "employee";
+      const remove = new Field(post, table);
+      remove.delete();
+
+
+    });
+}
