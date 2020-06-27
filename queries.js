@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const express = require('express');
+/* const express = require('express'); */
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -22,28 +22,19 @@ connection.connect(function (err) {
 
  
 class Field {
-  constructor(post) {
+  constructor(post, table) {
+    this.table = table;
     this.post = post;
-/* 
-     if (!post) {
-      console.error("Your entry is missing essential data."); */
     }
    
-
   addQuery() { 
-    let sql = `INSERT INTO employee (first_name, last_name, role, manager_id) VALUES (${this.post})`;
+    let sql = `INSERT INTO ${this.table} (first_name, last_name, role, manager_id) VALUES (${this.post})`;
     connection.query(sql, function (err, res)  {
       if (err) throw err;
     console.log("posted");
   }); 
 }
-    /* connection.query(query, function (err) {
-      if (err) throw err;
-      console.log("Your new entry has been saved!"); */
- /*    }); 
-  }
-}
- */
+
 }
 module.exports = Field;
 
