@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const express = require('express');
+const cTable = require('console.table');
 
 var connection = mysql.createConnection({
   host: "localhost",
@@ -15,10 +15,10 @@ connection.connect(function (err) {
 });
 
 
-class Field {
-  constructor(table, post, cols) {
+class Query {
+  constructor(table, field, cols) {
     this.table = table;
-    this.post = post;
+    this.field = field;
     this.cols = cols;
   }
 
@@ -26,35 +26,44 @@ class Field {
     let query = `SELECT * FROM ${this.table}`;
     connection.query(query, function (err, res) {
       if (err) throw err;
-      console.log(res);
+      console.table(res);
     })
-
   }
 
   delete() {
-    let sql = `DELETE FROM ${this.table} WHERE ${this.post};`;
+    let sql = `DELETE FROM ${this.table} WHERE ${this.field};`;
     connection.query(sql, function (err, res) {
       if (err) throw err;
       console.log("deleted");
     });
   }
 
-  new() {
-    let sql = `INSERT INTO ${this.table} ${this.cols} VALUES (${this.post})`;
+  add() {
+    let sql = `INSERT INTO ${this.table} ${this.cols} VALUES (${this.field})`;
     connection.query(sql, function (err, res) {
       if (err) throw err;
-      console.log("posted");
+      console.log("added");
+      console.table(res);
     });
   }
   update() {
-    let sql = `UPDATE ${this.table} SET role="test" WHERE ${this.post}`;
+    let sql = `UPDATE ${this.table} SET title=${cols} WHERE ${this.field}`;
     connection.query(sql, function (err, res) {
       if (err) throw err;
-      console.log("posted");
+      console.log("updated");
     });
   }
+
+/*   join() {
+    
+    let sql = `SELECT first_name, last_name, role_id, manager_id FROM employee INNER JOIN role WHERE role_id = `;
+    connection.query(sql, function (err, res) {
+      if (err) throw err;
+      console.table(res);
+  });
+} */
 }
-module.exports = Field;
+module.exports = Query;
 
 
 
