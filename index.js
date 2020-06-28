@@ -81,7 +81,7 @@ function runSearch() {
           removeDepartment();
           break;
 
-        case "exit":
+        case "Exit":
           console.log("Bye");
           connection.end();
           break;
@@ -125,7 +125,7 @@ function addEmployee() {
     {
       name: "role",
       type: "input",
-      message: "Role?"
+      message: "Role ID #?"
     },
     {
       name: "managerId",
@@ -133,12 +133,14 @@ function addEmployee() {
       message: "Manager ID?"
     }]
     ).then(function (answer) {
-      let cols = "(first_name, last_name, role, manager_id)";
+      let cols = "(first_name, last_name, role_id, manager_id)";
       let field = `"${answer.firstName}", "${answer.lastName}", "${answer.role}", ${answer.managerId}`;
       let table = "employee";
       let selection = new Query(table, field, cols);
       selection.add();
+      runSearch();
     });
+    
 }
 
 function addRole() {
