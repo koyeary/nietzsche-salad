@@ -73,7 +73,7 @@ function runSearch() {
           break;
 
         case "Update employee role":
-          updateField();
+          roleUpdate();
           break;
         /*
             case "Update employee manager":
@@ -115,7 +115,10 @@ function runSearch() {
 }
 
 function employeeAll() {
-  const query = "SELECT * FROM employee";
+  let table = "employee";
+  const employee = new Field(table);
+  employee.view();
+  /* const query = "SELECT * FROM employee";
   connection.query(query, function (err, res) {
     for (var i = 0; i < res.length; i++) {
       console.log(
@@ -131,12 +134,15 @@ function employeeAll() {
       );
     }
 
-  });
-  runSearch();
+  }); */
+//  runSearch();
 }
 
 function departmentSearch() {
-  const query = "SELECT * FROM department";
+  let table = "department";
+  const department = new Field(table);
+  department.view();
+  /* const query = "SELECT * FROM department";
   connection.query(query, function (err, res) {
     for (var i = 0; i < res.length; i++) {
       console.log(
@@ -147,12 +153,15 @@ function departmentSearch() {
 
       );
     }
-  });
+  }); */
 
 }
 
 function roleSearch() {
-  const query = "SELECT * FROM role";
+  let table = "department";
+  const role = new Field(table);
+  role.view();
+  /* const query = "SELECT * FROM role";
   connection.query(query, function (err, res) {
     for (var i = 0; i < res.length; i++) {
       console.log(
@@ -166,7 +175,7 @@ function roleSearch() {
       );
     }
   });
-
+ */
 }
 
 function addEmployee() {
@@ -192,15 +201,36 @@ function addEmployee() {
       message: "Manager ID?"
     }]
     ).then(function (answer) {
+      let cols = "(first_name, last_name, role, manager_id)";
       const post = `"${answer.firstName}", "${answer.lastName}", "${answer.role}", ${answer.managerId}`;
       const table = "employee";
-      const add = new Field(post, table);
-      add.addQuery();
+      const add = new Field(table, post, cols);
+      add.new();
 
       // let f = new Field();
       // f.addQuery(post);
     });
 
+}
+
+function roleUpdate() {
+  inquirer
+    .prompt({
+      name: "last_name",
+      type: "input",
+      message: "What is the last name of the employee?"
+    },
+    {name: "role",
+    type: "input",
+   message: "Enter new role: "
+  }
+    ).then(function (answer) {
+      let post = `last_name="${answer.last_name}"`;
+      let table = "employee";
+      let role = answer.role;
+      const update = new Field(table, post, role);
+      update.update();
+    })
 }
 
 function removeData() {
@@ -214,9 +244,8 @@ function removeData() {
     ).then(function (answer) {
       const post = `last_name="${answer.last_name}"`;
       const table = "employee";
-      const remove = new Field(post, table);
+      const remove = new Field(table, post);
       remove.delete();
-
 
     });
 }

@@ -1,33 +1,37 @@
 const mysql = require('mysql');
-/* const express = require('express'); */
+const express = require('express');
 
 var connection = mysql.createConnection({
   host: "localhost",
-
-  // Your port; if not 3306
   port: 3306,
-
-  // Your username
   user: "katyeary",
   /* user: "root", */
-
-  // Your password
   password: "newPass",
   database: "employee_DB"
 });
 
 connection.connect(function (err) {
   if (err) throw err;
-}); 
+});
 
- 
+
 class Field {
-  constructor(post, table) {
+  constructor(table, post, cols) {
     this.table = table;
     this.post = post;
-    }
-  
-  delete()  {
+    this.cols = cols;
+  }
+
+  view() {
+    let query = `SELECT * FROM ${this.table}`;
+    connection.query(query, function (err, res) {
+      if (err) throw err;
+      console.log(res);
+    })
+
+  }
+
+  delete() {
     let sql = `DELETE FROM ${this.table} WHERE ${this.post};`;
     connection.query(sql, function (err, res) {
       if (err) throw err;
@@ -35,14 +39,20 @@ class Field {
     });
   }
 
-  addQuery() { 
-    let sql = `INSERT INTO ${this.table} (first_name, last_name, role, manager_id) VALUES (${this.post})`;
-    connection.query(sql, function (err, res)  {
+  new() {
+    let sql = `INSERT INTO ${this.table} ${this.cols} VALUES (${this.post})`;
+    connection.query(sql, function (err, res) {
       if (err) throw err;
-    console.log("posted");
-  }); 
-}
-
+      console.log("posted");
+    });
+  }
+  update() {
+    let sql = `UPDATE ${this.table} SET role="test" WHERE ${this.post}`;
+    connection.query(sql, function (err, res) {
+      if (err) throw err;
+      console.log("posted");
+    });
+  }
 }
 module.exports = Field;
 
