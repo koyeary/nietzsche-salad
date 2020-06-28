@@ -1,16 +1,12 @@
-const mysql = require('mysql');
 const inquirer = require('inquirer');
 const Query = require('./queries');
+const mysql = require('mysql');
 
-
-//const app = express();
-
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
   host: "localhost",
-
   port: 3306,
   user: "katyeary",
-  /* user: "root", */
+  /*    user: "root",  */
   password: "newPass",
   database: "employee_DB"
 });
@@ -21,29 +17,27 @@ connection.connect(function (err) {
 });
 
 function runSearch() {
+  console.log("Employee Database Manager");
   inquirer
-    .prompt({
-      name: "select",
-      type: "list",
-      message: "What would you like to do?",
-      choices: [
-        "View all employees",
-        //  "View all employees by department",
-        "View all employees by manager",
-        "Add employee",
-        "Remove employee",
-        "Update employee role",
-        //   "Update employee manager",
-        "View all roles",
-        "Add role",
-        "Remove role",
-        "View all departments",
-        "Add department",
-        "Remove department",
-        // "View the utilized budget of a department",
-        "exit"
-      ]
-    })
+    .prompt(
+      {
+        name: "select",
+        type: "list",
+        message: "What would you like to do?",
+        choices: [
+          "View all employees",
+          "Add employee",
+          "Remove employee",
+          "Update employee role",
+          "View all roles",
+          "Add role",
+          "Remove role",
+          "View all departments",
+          "Add department",
+          "Remove department",
+          "Exit"
+        ]
+      })
     .then(function (answer) {
       switch (answer.select) {
         case "View all employees":
@@ -88,6 +82,7 @@ function runSearch() {
           break;
 
         case "exit":
+          console.log("Bye");
           connection.end();
           break;
       }
@@ -96,20 +91,23 @@ function runSearch() {
 
 function employeeAll() {
   let table = "employee";
-  const employee = new Query(table);
+  let employee = new Query(table);
   employee.view();
+  runSearch();
 }
 
 function departmentAll() {
   let table = "department";
-  const department = new Query(table);
+  let department = new Query(table);
   department.view();
+  runSearch();
 }
 
 function roleAll() {
   let table = "role";
-  const role = new Query(table);
+  let role = new Query(table);
   role.view();
+  runSearch();
 }
 
 function addEmployee() {
@@ -138,9 +136,8 @@ function addEmployee() {
       let cols = "(first_name, last_name, role, manager_id)";
       let field = `"${answer.firstName}", "${answer.lastName}", "${answer.role}", ${answer.managerId}`;
       let table = "employee";
-      const add = new Query(table, field, cols);
+      let selection = new Query(table, field, cols);
       selection.add();
-
     });
 }
 
@@ -165,9 +162,8 @@ function addRole() {
       let cols = "(title, salary, department_id)";
       let field = `"${answer.title}", "${answer.salary}", "${answer.department}"`;
       let table = "role";
-      const selection = new Query(table, field, cols);
+      let selection = new Query(table, field, cols);
       selection.add();
-
     });
 }
 function addDepartment() {
@@ -186,9 +182,8 @@ function addDepartment() {
       let cols = "(name, department_id)";
       let field = `"${answer.name}", "${answer.department_id}"`;
       let table = "department";
-      const add = new Query(table, field, cols);
+      let selection = new Query(table, field, cols);
       selection.add();
-
     });
 }
 
@@ -208,7 +203,7 @@ function roleUpdate() {
       let field = `last_name="${answer.last_name}"`;
       let table = "employee";
       let cols = answer.role;
-      const selection = new Query(table, field, cols);
+      let selection = new Query(table, field, cols);
       selection.update();
     })
 }
@@ -222,9 +217,9 @@ function removeEmployee() {
 
     }
     ).then(function (answer) {
-      const field = `last_name="${answer.last_name}"`;
-      const table = "employee";
-      const selection = new Query(table, field);
+      let field = `last_name="${answer.last_name}"`;
+      let table = "employee";
+      let selection = new Query(table, field);
       selection.delete();
     });
 }
@@ -241,7 +236,6 @@ function removeRole() {
       let table = "role";
       let selection = new Query(table, field);
       selection.delete();
-
     });
 }
 
@@ -259,4 +253,5 @@ function removeDepartment() {
       let selection = new Query(table, field);
       selection.delete();
     })
-    }
+}
+
