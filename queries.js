@@ -45,7 +45,7 @@ class Query {
     });
   }
   update() {
-    let sql = `UPDATE ${this.table} SET title=${cols} WHERE ${this.field}`;
+    let sql = `UPDATE ${this.table} SET role_id="3" WHERE ${this.field}`;
     connection.query(sql, function (err, res) {
       if (err) throw err;
       console.log("Field updated");

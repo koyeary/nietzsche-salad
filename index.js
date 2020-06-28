@@ -156,16 +156,17 @@ function addRole() {
       message: "Assign the role a salary (using only integers, no punctuation):"
     },
     {
-      name: "department",
+      name: "department_id",
       type: "input",
       message: "Input the new role's department id:"
     }]
     ).then(function (answer) {
       let cols = "(title, salary, department_id)";
-      let field = `"${answer.title}", "${answer.salary}", "${answer.department}"`;
+      let field = `"${answer.title}", "${answer.salary}", "${answer.department_id}"`;
       let table = "role";
       let selection = new Query(table, field, cols);
       selection.add();
+      runSearch();
     });
 }
 function addDepartment() {
@@ -186,12 +187,13 @@ function addDepartment() {
       let table = "department";
       let selection = new Query(table, field, cols);
       selection.add();
+      runSearch();
     });
 }
 
 function roleUpdate() {
   inquirer
-    .prompt({
+    .prompt([{
       name: "last_name",
       type: "input",
       message: "What is the last name of the employee whose role you would like to change?"
@@ -199,14 +201,15 @@ function roleUpdate() {
       {
         name: "role",
         type: "input",
-        message: "Enter new role: "
-      }
+        message: "Enter new role ID: "
+      }]
     ).then(function (answer) {
       let field = `last_name="${answer.last_name}"`;
       let table = "employee";
-      let cols = answer.role;
+      let cols = `role_id=${answer.role}`;
       let selection = new Query(table, field, cols);
       selection.update();
+      runSearch();
     })
 }
 
@@ -223,6 +226,7 @@ function removeEmployee() {
       let table = "employee";
       let selection = new Query(table, field);
       selection.delete();
+      runSearch();
     });
 }
 
@@ -238,6 +242,7 @@ function removeRole() {
       let table = "role";
       let selection = new Query(table, field);
       selection.delete();
+      runSearch();
     });
 }
 
@@ -254,6 +259,7 @@ function removeDepartment() {
       let table = "department";
       let selection = new Query(table, field);
       selection.delete();
+      runSearch();
     })
 }
 
